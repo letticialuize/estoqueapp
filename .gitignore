@@ -1,0 +1,70 @@
+# Arquivos e diretórios específicos para a API AspNet 7
+
+# Arquivos binários
+*.exe
+*.dll
+*.pdb
+
+# Arquivos gerados pelo Visual Studio
+.vs/
+*_i.c
+*_p.c
+*.ilk
+*.meta
+*.obj
+*.pch
+*.res
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.log
+*.vspscc
+*.vssscc
+.builds
+
+# Diretórios gerados pelo Visual Studio
+UpgradeLog.XML
+_ReSharper*/
+packages/
+TestResults/
+obj/
+
+# Arquivos de publicação
+*.pubxml
+*.publishsettings
+*.pubxml.*
+*.user
+
+# Arquivos de ferramentas
+Tools/
+
+# Arquivos gerados pela plataforma
+*.nupkg
+*.pfx
+*.snk
+
+# Diretórios de cache
+*.idea/
+*.vscode/
+*.suo
+*.cache
+*.npm/
+*.yarn/
+*.stackdump
+
+# Diretórios de registro
+logs/
+*.log
+
+# Outros
+node_modules/
+bower_components/
+*.lock.json
+npm-debug.log
+yarn-error.log
+
+# Arquivos de configuração do IDE
+.vscode/
+.idea/
