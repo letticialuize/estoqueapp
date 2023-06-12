@@ -1,10 +1,12 @@
 ﻿using EstoqueApp.Application.Interfaces.Service;
 using EstoqueApp.Application.Models.Commands;
 using EstoqueApp.Application.Models.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EstoqueApp.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProdutosController : ControllerBase
@@ -30,7 +32,7 @@ namespace EstoqueApp.API.Controllers
             return StatusCode(200, await _produtoAppService?.Update(command));
         }
 
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ProdutoQuery), 200)]
         public async Task<IActionResult> Delete(Guid? id)
         {

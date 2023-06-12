@@ -1,4 +1,5 @@
-﻿using EstoqueApp.Application.Notifications;
+﻿using EstoqueApp.Application.Interfaces.Persistences;
+using EstoqueApp.Application.Notifications;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,29 @@ namespace EstoqueApp.Application.Handlers.Notifications
     public class ProdutoNotificationHandler
         : INotificationHandler<ProdutoNotification>
     {
+        private readonly IProdutoPersistence? _produtoPersistence;
+
+        public ProdutoNotificationHandler(IProdutoPersistence? produtoPersistence)
+        {
+            _produtoPersistence = produtoPersistence;
+        }
+
         public Task Handle(ProdutoNotification notification, CancellationToken cancellationToken)
         {
-            //TODO Enviar para o MongoDb
-            throw new NotImplementedException();
+            switch (notification.Action)
+            {
+                case ActionNotification.Create:
+                    _produtoPersistence.Add(notification.Produto);
+                    break;
+                case ActionNotification.Update:
+                    _produtoPersistence.Update(notification.Produto);
+                    break;
+                case ActionNotification.Delete:
+                    _produtoPersistence.Delete(notification.Produto);
+                    break;
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

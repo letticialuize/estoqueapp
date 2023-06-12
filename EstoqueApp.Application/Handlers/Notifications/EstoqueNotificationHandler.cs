@@ -26,6 +26,12 @@ namespace EstoqueApp.Application.Handlers.Notifications
                 case ActionNotification.Create:
                     _estoquePersistence.Add(notification.Estoque);
                     break;
+                case ActionNotification.Update:
+                    _estoquePersistence.Update(notification.Estoque);
+                    break;
+                case ActionNotification.Delete:
+                    _estoquePersistence.Delete(notification.Estoque);
+                    break;
             }
 
             return Task.CompletedTask;

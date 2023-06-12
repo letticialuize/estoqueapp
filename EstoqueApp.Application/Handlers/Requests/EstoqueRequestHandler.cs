@@ -1,4 +1,5 @@
-﻿using EstoqueApp.Application.Handlers.Notifications;
+﻿using AutoMapper;
+using EstoqueApp.Application.Handlers.Notifications;
 using EstoqueApp.Application.Models.Commands;
 using EstoqueApp.Application.Models.Queries;
 using EstoqueApp.Application.Notifications;
@@ -19,32 +20,24 @@ namespace EstoqueApp.Application.Handlers.Requests
         IRequestHandler<EstoqueUpdateCommand, EstoqueQuery>
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
         private readonly IEstoqueDomainService? _estoqueDomainService;
 
-        public EstoqueRequestHandler(IMediator? mediator, IEstoqueDomainService? estoqueDomainService)
+        public EstoqueRequestHandler(IMediator? mediator, IMapper? mapper, IEstoqueDomainService? estoqueDomainService)
         {
             _mediator = mediator;
+            _mapper = mapper;
             _estoqueDomainService=estoqueDomainService;
         }
 
         public async Task<EstoqueQuery> Handle(EstoqueCreateCommand request, CancellationToken cancellationToken)
         {
             //TODO Realizar o cadastro do estoque no domínio
-            var estoque = new Estoque
-            {
-                Id = Guid.NewGuid(),
-                Nome = request.Nome, 
-                Descricao = request.Descricao
-            };
+            var estoque = _mapper.Map<Estoque>(request);
 
             _estoqueDomainService.Add(estoque);
 
-            var estoqueQuery = new EstoqueQuery
-            {
-                Id = estoque.Id,
-                Nome = estoque.Nome,
-                Descricao = estoque.Descricao
-            };
+            var estoqueQuery = _mapper.Map<EstoqueQuery>(estoque);
 
             await _mediator.Publish(
                 new EstoqueNotification 
@@ -57,12 +50,17 @@ namespace EstoqueApp.Application.Handlers.Requests
             return estoqueQuery;
         }
 
-        public async Task<EstoqueQuery> Handle(EstoqueDeleteCommand request, CancellationToken cancellationToken)
+        public async Task<EstoqueQuery> Handle(EstoqueUpdateCommand request, CancellationToken cancellationToken)
         {
             //TODO Realizar a atualização do estoque no domínio
 
-            var estoqueQuery = new EstoqueQuery();
+            var estoque = _estoqueDomainService.GetById(request.Id.Value);
+            estoque.Nome = request.Nome;
+            estoque.Descricao = request.Descricao;
 
+            _estoqueDomainService.Update(estoque);
+
+            var estoqueQuery = _mapper.Map<EstoqueQuery>(estoque);
             await _mediator.Publish(
                 new EstoqueNotification
                 {
@@ -74,11 +72,13 @@ namespace EstoqueApp.Application.Handlers.Requests
             return estoqueQuery;
         }
 
-        public async Task<EstoqueQuery> Handle(EstoqueUpdateCommand request, CancellationToken cancellationToken)
+        public async Task<EstoqueQuery> Handle(EstoqueDeleteCommand request, CancellationToken cancellationToken)
         {
             //TODO Realizar a exclusão do estoque no domínio
+            var estoque = _estoqueDomainService.GetById(request.Id.Value);
+            _estoqueDomainService.Delete(estoque);
 
-            var estoqueQuery = new EstoqueQuery();
+            var estoqueQuery = _mapper.Map<EstoqueQuery>(estoque);
 
             await _mediator.Publish(
                 new EstoqueNotification

@@ -1,4 +1,5 @@
-﻿using EstoqueApp.Application.Interfaces.Service;
+﻿using EstoqueApp.Application.Interfaces.Persistences;
+using EstoqueApp.Application.Interfaces.Service;
 using EstoqueApp.Application.Models.Commands;
 using EstoqueApp.Application.Models.Queries;
 using MediatR;
@@ -13,10 +14,12 @@ namespace EstoqueApp.Application.Services
     public class EstoqueAppService : IEstoqueAppService
     {
         private readonly IMediator? _mediator;
+        private readonly IEstoquePersistence _estoquePersistence;
 
-        public EstoqueAppService(IMediator? mediator)
+        public EstoqueAppService(IMediator? mediator, IEstoquePersistence estoquePersistence)
         {
             _mediator = mediator;
+            _estoquePersistence=estoquePersistence;
         }
 
         public async Task<EstoqueQuery> Create(EstoqueCreateCommand command)
@@ -34,14 +37,14 @@ namespace EstoqueApp.Application.Services
 
         public List<EstoqueQuery> GetAll()
         {
-            throw new NotImplementedException();
+            return _estoquePersistence.GetAll();
         }
 
         public EstoqueQuery GetById(Guid? id)
         {
-            throw new NotImplementedException();
+            return _estoquePersistence.GetById(id.Value);
         }
 
-       
+
     }
 }

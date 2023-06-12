@@ -14,5 +14,7 @@ namespace EstoqueApp.Application.Models.Queries
         public int? Quantidade { get; set; }
         public Guid? EstoqueId { get; set; }
         public EstoqueQuery? Estoque { get; set; }
+        public DateTime? DataHoraCriacao { get; set; }
+
     }
 }
